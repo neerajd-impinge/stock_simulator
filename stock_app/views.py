@@ -22,4 +22,5 @@ def	auth(request):
 		ci=RequestContext(request)
 		return render_to_response('sign_up.html',{'form':form},ci)
 	
-	
+def home(request):
+	return HttpResponse("df")
