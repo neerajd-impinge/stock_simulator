@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.models import User
-
+from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
@@ -43,7 +43,6 @@ def home(request):
 		data[i]['company'] = c
 		data[i]['json'] = r.json()
 		i = i + 1
-		print r.json()
 	return render_to_response('home.html',{'data':data,'userProfile':userProfile}, RequestContext( request ) )
 
 def viewCompany(request,company):
@@ -61,8 +60,10 @@ def search(request):
 	try:	
 		c = request.GET['q']
 	except Exception as e:
-		print e
 		c = None
+	if c == '':
+		messages.warning(request, 'you are searching for nothing ,Please submit some parameters for search.')
+		return redirect('/') 
 	url = 'http://data.benzinga.com/stock/'
 	r = requests.get(url +str(c))
 	data = r.json()
