@@ -13,7 +13,7 @@ def	auth(request):
 			username=data['username']
 			password=data['password1']
 			User.objects.create_user(username=username,password=password)
-			return HttpResponseRedirect('/login')
+			return HttpResponseRedirect('stockapp/login')
 		return render_to_response('sign_up.html',{'form':form},ci)
 	else:
 		ci=RequestContext(request)
