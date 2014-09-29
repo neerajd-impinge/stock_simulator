@@ -16,7 +16,7 @@ def	auth(request):
 			password=data['password1']
 			user=User.objects.create_user(username=username,password=password)
 			UserProfile.objects.create(user=user)
-			return redirect('stockapp/login')
+			return redirect('/stockapp/login')
 		return render_to_response('sign_up.html',{'form':form},ci)
 	else:
 		ci=RequestContext(request)
