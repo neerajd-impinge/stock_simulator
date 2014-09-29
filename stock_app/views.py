@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 
 from django.contrib.auth.forms import UserCreationForm
 
+from .models import UserProfile
+
 def	auth(request):
 	form = UserCreationForm(request.POST or None)
 	if request.method == 'POST':
@@ -12,7 +14,8 @@ def	auth(request):
 			data=form.cleaned_data
 			username=data['username']
 			password=data['password1']
-			User.objects.create_user(username=username,password=password)
+			user=User.objects.create_user(username=username,password=password)
+			UserProfile.objects.create(user=user)
 			return HttpResponseRedirect('stockapp/login')
 		return render_to_response('sign_up.html',{'form':form},ci)
 	else:
