@@ -71,14 +71,22 @@ def search(request):
 
 def stockAction(request, action):
 	if action == 'buy':
-		price = request.GET['p']
+		p = request.POST['price']
+		qty = request.POST['qty']
+		price = int(qty) * d(p)
 		userProfile = UserProfile.objects.get(user = request.user)
+		avail_b = userProfile.available_balance
+		if d(price) > (avail_b):
+			messages.warning(request, 'You cureent balance is low so you cannot buy '+qty+' number of stocks')
+			return redirect(request.META.get('HTTP_REFERER'))
 		new_avail_balance = userProfile.available_balance - d(price)
 		userProfile.available_balance = new_avail_balance
 		userProfile.save()
 		return redirect('/')
 	if action == 'sell':
-		price = request.GET['p']
+		p = request.POST['price']
+		qty = request.POST['qty']
+		price = int(qty) * d(p)
 		userProfile = UserProfile.objects.get(user = request.user)
 		new_avail_balance = userProfile.available_balance + d(price)
 		userProfile.available_balance = new_avail_balance

@@ -2,7 +2,7 @@
 
 
 {% block main_content %}
-
+	<div style="float:right;"> <a href="/">Back to Home</a></div>
 	{% if data.msg %}
 		<p>{{data.msg}} , Please Search with valid Parameters.</p>
 	{% else %}
@@ -23,11 +23,43 @@
 					</tr>
 				</tbody>
 			</table>
-			
-			<button type="submit" name="Quantity">Quantity</button>
-			<a href="{% url 'stock_action' 'buy' %}/?p={{data.ask}}">Buy</a>
-			<a href="{% url 'stock_action' 'sell' %}/?p={{data.bid}}">Sell</a>
+			<br />
+			<a id="buy" href="javascript:void('0');">Click here to Buy stocks </a><br /><br />
+			<a id="sell" href="javascript:void('0');">Click here to Sell stocks</a><br />
+			<form id ="buyform" action="{% url 'stock_action' 'buy' %}" method="POST">{% csrf_token %}
+				<input type="hidden" name="price" value="{{data.ask}}">
+			</form>
+			<form id="sellform" action="{% url 'stock_action' 'sell' %}" method="POST">{% csrf_token %}
+				<input type="hidden" name="price" value="{{data.bid}}">
+			</form>
 		</div>
 	{% endif %}
 
 {%  endblock %}
+
+
+{% block extra_js %}
+<script>
+$(document).ready(function(){
+	$('#buy').click(function(){
+		html = "<b>Quantity of Stocks you want to Buy : <input type='text' name='qty' value=''></b>";
+		html += '&nbsp;&nbsp;';
+		html += '<input type="submit" name="submit" value="Buy stocks Now">';
+		$(this).remove();
+		$('#sell').remove();
+		$('#buyform').append(html);
+	});
+	$('#sell').click(function(){
+		html = "<b>Quantity of Stocks you want to Sell : <input type='text' name='qty' value=''></b>";
+		html += '&nbsp;&nbsp;';
+		html += '<input type="submit" name="submit" value="Sold stocks Now">';
+		$('#sellform').append(html);
+		$(this).remove();
+		$('#buy').remove();
+	});
+
+});
+
+</script>
+
+{% endblock %}

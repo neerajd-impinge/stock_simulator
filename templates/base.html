@@ -10,6 +10,10 @@
 	{% endif %}
 {%  endblock %}
 
+{% block js %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+{% endblock js %}
+
 
 {% block header %}
 	<div style="width:100%;height:35%;border-bottom: 3px outset #000000;height: 10%;">
@@ -49,3 +53,7 @@
 		</table>
 	</div>
 {% endblock %}
+
+{% block extra_js %}
+{% endblock %}
+
