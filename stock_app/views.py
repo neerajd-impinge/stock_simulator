@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response
-from django.http import HttpResponse
+from django.http import HttpResponse, redirect
 from django.template import RequestContext
 from django.contrib.auth.models import User
 
@@ -16,7 +16,7 @@ def	auth(request):
 			password=data['password1']
 			user=User.objects.create_user(username=username,password=password)
 			UserProfile.objects.create(user=user)
-			return HttpResponseRedirect('stockapp/login')
+			return redirect('stockapp/login')
 		return render_to_response('sign_up.html',{'form':form},ci)
 	else:
 		ci=RequestContext(request)
