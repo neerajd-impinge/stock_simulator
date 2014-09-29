@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
 from .models import UserProfile
-
+from decimal import Decimal as d
 
 import requests
 
@@ -46,6 +46,12 @@ def home(request):
 		print r.json()
 	return render_to_response('home.html',{'data':data,'userProfile':userProfile}, RequestContext( request ) )
 
+def viewCompany(request,company):
+	url = 'http://data.benzinga.com/stock/'
+	r = requests.get(url +str(company))
+	data = r.json()
+	return render_to_response('company_stock.html',{'data':data}, RequestContext( request ) )
+
 def search(request):
 	try:
 		userProfile = UserProfile.objects.get(user = request.user)
@@ -61,3 +67,20 @@ def search(request):
 	r = requests.get(url +str(c))
 	data = r.json()
 	return render_to_response('search.html',{'data':data,'userProfile':userProfile}, RequestContext( request ) )
+
+def stockAction(request, action):
+	if action == 'buy':
+		price = request.GET['p']
+		userProfile = UserProfile.objects.get(user = request.user)
+		new_avail_balance = userProfile.available_balance - d(price)
+		userProfile.available_balance = new_avail_balance
+		userProfile.save()
+		return redirect('/')
+	if action == 'sell':
+		price = request.GET['p']
+		userProfile = UserProfile.objects.get(user = request.user)
+		new_avail_balance = userProfile.available_balance + d(price)
+		userProfile.available_balance = new_avail_balance
+		userProfile.save()
+		return redirect('/')
+	

@@ -1,36 +1,33 @@
-<div style="width:100%;height:35%;border-bottom: 3px outset #000000;height: 10%;">
-		<div style="width:70%;"><span><b> Simple Stock Exchange </span></b></div>
-		<div style="width:30%;float:right;margin: -21px 0 0;padding: 0;">
-			<form action="/stockapp/search/" method="GET">{% csrf_token %}
-				<b><input type="text" name="q"> </b>
-				</b><input type="submit" name="submit" value="submit">
-			</form>
-			<span style="float:right; margin: -35px 10px 0;"><b>look up</b></span>
-		</div>
-</div>
+{% extends "base.html" %}
 
-{% if data.msg %}
-	<p>{{data.msg}} , Please Search with valid Parameters.</p>
-{% else %}
-	<div style="float:left;width:50%;height:35%">
-		<p>
-			<span><b>Sample Company</b></span>
-		</p>
-		<table border="1px" style="width:66%;">
-			<thead>
-				<th>Bid</th>
-				<th>Ask</th>
-			</thead>
-			<tbody>
-				<tr>
-					<td>{{data.bid}}</td>
-					<td>{{data.ask}}</td>
-				</tr>
-			</tbody>
-		</table>
-		
-		<button type="submit" name="Quantity">Quantity</button>
-		<button type="submit" name="Buy">Buy</button>
-		<button type="submit" name="Sell">Sell</button>
-	</div>
-{% endif %}
+
+{% block main_content %}
+
+	{% if data.msg %}
+		<p>{{data.msg}} , Please Search with valid Parameters.</p>
+	{% else %}
+		<div style="float:left;width:80%;height:35%">
+			<p>
+				<span><b>{{data.name}}</b></span>
+				<span style="float:right;margin-right: 12%;"><b>${{userProfile.available_balance}}</b><span>
+			</p>
+			<table border="1px" style="width:66%;">
+				<thead>
+					<th>Bid</th>
+					<th>Ask</th>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{data.bid}}</td>
+						<td>{{data.ask}}</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<button type="submit" name="Quantity">Quantity</button>
+			<a href="{% url 'stock_action' 'buy' %}/?p={{data.ask}}">Buy</a>
+			<a href="{% url 'stock_action' 'sell' %}/?p={{data.bid}}">Sell</a>
+		</div>
+	{% endif %}
+
+{%  endblock %}
