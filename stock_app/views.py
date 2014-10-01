@@ -62,34 +62,50 @@ def search(request):
 	except Exception as e:
 		c = None
 	if c == '':
-		messages.warning(request, 'you are searching for nothing ,Please submit some parameters for search.')
-		return redirect('/') 
+		messages.warning(request, 'You are searching for nothing ,Please submit some parameters for search.')
+		return redirect('/')
+	if str(c) not in ['F','GE','JNJ'] :
+		messages.warning(request, 'Your requested company is not found in the list. Please search an Available Company.')
+		return redirect('/')
 	url = 'http://data.benzinga.com/stock/'
 	r = requests.get(url +str(c))
 	data = r.json()
 	return render_to_response('search.html',{'data':data,'userProfile':userProfile}, RequestContext( request ) )
 
+
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+@csrf_exempt
 def stockAction(request, action):
+	response = {}
+	p = request.POST['price']
+	qty = request.POST['qty']
+	userProfile = UserProfile.objects.get(user = request.user)
+	avail_b = userProfile.available_balance
+	if not qty:
+		response['msg']='Please Enter a number to %s stocks' %(action)
+		response['status'] = 0
+		return HttpResponse(json.dumps(response))
+
+	price = int(qty) * d(p)
 	if action == 'buy':
-		p = request.POST['price']
-		qty = request.POST['qty']
-		price = int(qty) * d(p)
-		userProfile = UserProfile.objects.get(user = request.user)
-		avail_b = userProfile.available_balance
 		if d(price) > (avail_b):
-			messages.warning(request, 'You cureent balance is low so you cannot buy '+qty+' number of stocks')
-			return redirect(request.META.get('HTTP_REFERER'))
+			msg = 'You cureent balance is low so you cannot buy '+qty+' number of stocks'
+			response['msg'] = msg
+			response['status'] = 0
+			return HttpResponse(json.dumps(response))
 		new_avail_balance = userProfile.available_balance - d(price)
 		userProfile.available_balance = new_avail_balance
 		userProfile.save()
-		return redirect('/')
+		response['price'] = float(new_avail_balance)
+		response['status'] = 1
+		return HttpResponse(json.dumps(response))
 	if action == 'sell':
-		p = request.POST['price']
-		qty = request.POST['qty']
-		price = int(qty) * d(p)
-		userProfile = UserProfile.objects.get(user = request.user)
 		new_avail_balance = userProfile.available_balance + d(price)
 		userProfile.available_balance = new_avail_balance
 		userProfile.save()
-		return redirect('/')
+		response['price'] = float(new_avail_balance)
+		response['status'] = 1
+		return HttpResponse(json.dumps(response))
 	

@@ -1,17 +1,178 @@
 {% extends "base.html" %}
-
+{% load static %}
 
 {% block main_content %}
-	<div style="float:right;"> <a href="/">Back to Home</a></div>
-	{% if data.msg %}
-		<p>{{data.msg}} , Please Search with valid Parameters.</p>
-	{% else %}
-		<div style="float:left;width:80%;height:35%">
+<div class="col-md-8 col-md-offset-1" id = "error">
+</div>
+
+<div class="col-xs-3 fr"> <a href="/">Back to Home</a></div>
+<div class="current-portfolio"><!--curent-portfolio-->
+				
+				<div class="container">
+					<div class="panel panel-default">
+						<!-- Default panel contents -->
+						<div class="panel-heading">
+							{{data.name}}
+							<span class="fr" id = "balance">${{userProfile.available_balance}}</span>
+						</div>
+							<!-- Table -->
+						<table border="0" cellpadding="0" cellspacing="0" class="table">
+							<thead>
+								<tr>
+									<th>Bid</th>
+									<th>Ask</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>{{data.bid}}</td>
+									<td>{{data.ask}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+        
+				<div class=" ford-btm col-xs-12">
+					<div class="col-xs-6">
+						<a href="#" data-toggle="modal" data-target="#myBuyModal">
+       						Click here to Buy stocks 
+       					</a>
+       					<a href="#" data-toggle="modal" data-target="#mySellModal">
+       		 				Click here to sell stocks 
+       					</a>
+					</div>
+					
+				</div>
+			</div>
+      
+        <div class=" ford-btm col-xs-12">
+      
+        <div class="container">
+      
+   
+     </div> <!--containor--> 
+      </div>
+      
+ 
+   </div><!--cureent-portfolio-end-->
+   
+
+
+
+ <!-- Modal -->
+<div class="modal" id="myBuyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+         <div class=" ford-btm col-xs-12">
+      
+      <nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       
+       <h2>Quantity of Stocks you want to Buy :</h2>
+       
+      <form class="navbar-form navbar-left" id ="buyform" action="{% url 'stock_action' 'buy' %}" method="POST">
+        <div class="form-group">
+        	{% csrf_token %}
+			<input type="text" class="form-control" placeholder="Enter Quantity" name='qty'>
+        	<input type="hidden" name="price" value="{{data.ask}}">
+        </div>
+        <button type="submit" class="btn btn-default">Buy stock now</button>
+      </form>
+      
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+      
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+ <!-- Modal -->
+<div class="modal" id="mySellModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+         <div class=" ford-btm col-xs-12">
+      
+      <nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       
+       <h2>Quantity of Stocks you want to Sell :</h2>
+       
+      <form class="navbar-form navbar-left" id="sellform" action="{% url 'stock_action' 'sell' %}" method="POST">
+				{% csrf_token %}
+        <div class="form-group">
+        	<input type="hidden" name="price" value="{{data.bid}}">
+			<input type="text" class="form-control" placeholder="Enter Quantity" name="qty">
+        </div>
+        <button type="submit" class="btn btn-default">Sale stock now</button>
+      </form>
+      
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+      
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		
+<!-- 	{% if data.msg %}
+		<p id >{{data.msg}} , Please Search with valid Parameters.</p>
+	{% else %} -->
+		<!--<div style="float:left;width:80%;height:35%">
 			<p>
-				<span><b>{{data.name}}</b></span>
-				<span style="float:right;margin-right: 12%;"><b>${{userProfile.available_balance}}</b><span>
-			</p>
-			<table border="1px" style="width:66%;">
+				<span><b>{{data.name}}</b></span>-->
+				<!--<span id = "balance" style="float:right;margin-right: 12%;"><b>${{userProfile.available_balance}}</b><span>-->
+			<!--</p>-->
+			<!--<table border="1px" style="width:66%;">
 				<thead>
 					<th>Bid</th>
 					<th>Ask</th>
@@ -23,16 +184,18 @@
 					</tr>
 				</tbody>
 			</table>
-			<br />
-			<a id="buy" href="javascript:void('0');">Click here to Buy stocks </a><br /><br />
+			<br />-->
+			<!--<a id="buy" href="javascript:void('0');">Click here to Buy stocks </a><br /><br />
 			<a id="sell" href="javascript:void('0');">Click here to Sell stocks</a><br />
-			<form id ="buyform" action="{% url 'stock_action' 'buy' %}" method="POST">{% csrf_token %}
+			<form id ="buyform" action="{% url 'stock_action' 'buy' %}" method="POST">
+				{% csrf_token %}
 				<input type="hidden" name="price" value="{{data.ask}}">
 			</form>
-			<form id="sellform" action="{% url 'stock_action' 'sell' %}" method="POST">{% csrf_token %}
+			<form id="sellform" action="{% url 'stock_action' 'sell' %}" method="POST">
+				{% csrf_token %}
 				<input type="hidden" name="price" value="{{data.bid}}">
 			</form>
-		</div>
+		</div>-->
 	{% endif %}
 
 {%  endblock %}
@@ -41,24 +204,78 @@
 {% block extra_js %}
 <script>
 $(document).ready(function(){
-	$('#buy').click(function(){
-		html = "<b>Quantity of Stocks you want to Buy : <input type='text' name='qty' value=''></b>";
-		html += '&nbsp;&nbsp;';
-		html += '<input type="submit" name="submit" value="Buy stocks Now">';
-		$(this).remove();
-		$('#sell').remove();
-		$('#buyform').append(html);
-	});
-	$('#sell').click(function(){
-		html = "<b>Quantity of Stocks you want to Sell : <input type='text' name='qty' value=''></b>";
-		html += '&nbsp;&nbsp;';
-		html += '<input type="submit" name="submit" value="Sold stocks Now">';
-		$('#sellform').append(html);
-		$(this).remove();
-		$('#buy').remove();
+	$('#error').empty();
+	
+	$('#buyform').on('submit', function(e){
+		$('#loading').show();
+		$('#error').empty();
+		e.preventDefault();
+		host = '{{ request.META.HTTP_HOST }}';
+		path = host+'/stockapp/stock/buy/';
+		data = $(this).serialize();
+
+		$.ajax({
+		    url : path,
+		    type: "POST",
+		    data : data,
+		    dataType: 'json',
+		    success: function(response, textStatus, jqXHR)
+		    {
+		    	console.log(response);
+		    	if(response.status == 0){
+		    		$('#error').html(response.msg);
+
+		    	}else{
+			    	$('#balance').html('<b>$'+response.price+'</b>');
+			    	
+			    }
+			    $('#loading').hide();
+			    $("#myBuyModal").modal('hide');
+			},
+		    error: function (jqXHR, textStatus, errorThrown)
+		    {
+		    	console.log(" i am in error message");
+		    	console.log(jqXHR);
+		    	$('#loading').hide();
+		    }
+		});
 	});
 
+
+	$('#sellform').on('submit', function(e){
+		$('#error').empty();
+		$('#loading').show();
+		e.preventDefault();
+		host = '{{ request.META.HTTP_HOST }}';
+		path = host+'/stockapp/stock/sell/';
+		data = $(this).serialize();
+
+		$.ajax({
+		    url : path,
+		    type: "POST",
+		    data : data,
+		    dataType: 'json',
+		    success: function(response, textStatus, jqXHR)
+		    {
+		    	if(response.status == 0){
+		    		$('#error').html(response.msg);
+		    	}else{
+			    	$('#balance').html('<b>$'+response.price+'</b>');
+			    }
+			    $('#loading').hide();
+			    $("#mySellModal").modal('hide');
+			},
+		    error: function (jqXHR, textStatus, errorThrown)
+		    {
+		    	console.log(jqXHR);
+		    	$('#loading').hide();
+		    }
+		});
+	});
+
+
 });
+
 
 </script>
 

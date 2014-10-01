@@ -1,59 +1,82 @@
-{% block title %}<title>Stock Exchange Simulator</title>{% endblock %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% load static %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		{% block title %}
+			<title>
+				Stock Exchange Simulator
+			</title>
+		{% endblock title %}
+	
+		{% block css %}
+				<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" />
+				<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" />
+				<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+		{% endblock css %}
 
-{% block messages %}
-	{% if messages %}
-	<ul class="messages">
-		{% for message in messages %}
-		<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-		{% endfor %}
-	</ul>
-	{% endif %}
-{%  endblock %}
+		{% block js %}
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+			<script src= "{% static 'js/bootstrap.min.js' %}" type="text/javascript"> </script>
+		{% endblock js %}
+	</head>
 
-{% block js %}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-{% endblock js %}
+	<body>
+	<!--wrapper-->
+	 <div id="wrapper">
+		
+		{% block header %}
+			<div class="header-wrap blue-bg"><!--header-wrap-->
+			    <div class="containor">
+				    <nav class="navbar" role="navigation">
+						  <div class="container-fluid">
+						    <!-- Brand and toggle get grouped for better mobile display -->
+						    <div class="logo col-xs-4">Simple Stock Exchange</div>
 
+					    	<!-- Collect the nav links, forms, and other content for toggling -->
+					    	<div class="collapse navbar-collapse col-xs-4" id="bs-example-navbar-collapse-1">
+					      
+					      		<form class="navbar-form navbar-left" role="search" action="/stockapp/search/" method="GET">{% csrf_token %}
+					        		<div class="form-group">
+					          			<input type="text" class="form-control" placeholder="Search" name="q">
+					        		</div>
+					        	<input type="submit" class="btn btn-default" name="submit" value="Submit">
+					      </form>
+					   </div><!-- /.navbar-collapse -->
+					   
+					   <div class="col-xs-4">
+					     <div class="lookup-btn">
+					  <button type="button" class="btn btn-default" > look up </button>
+					   </div>
+					   </div>
+					  </div><!-- /.container-fluid -->
+				</nav>
+		    </div>
+	   	</div>
+	{%  endblock header %}
+	<div class="col-md-8 col-md-offset-1">
+		{% block messages %}
+			{% if messages %}
+				<ul class="messages">
+					{% for message in messages %}
+						<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+		{%  endblock messages %}
 
-{% block header %}
-	<div style="width:100%;height:35%;border-bottom: 3px outset #000000;height: 10%;">
-			<div style="width:70%;"><span><b> Simple Stock Exchange </span></b></div>
-			<div style="width:30%;float:right;margin: -21px 0 0;padding: 0;">
-				<form action="/stockapp/search/" method="GET">{% csrf_token %}
-					<b><input type="text" name="q"> </b>
-					</b><input type="submit" name="submit" value="submit">
-				</form>
-				<span style="float:right; margin: -35px 10px 0;"><b>look up</b></span>
-			</div>
 	</div>
-{%  endblock %}
 
-{% block main_content %}
-	<div style="float:right;width:80%;">
-		<p>
-			<span><b>Current Portfolio</b></span>
-			<span style="float:right;margin-right: 12%;"><b>${{userProfile.available_balance}}</b><span>
-		</p>
-		<table border="1px" style="height:35%;width: 88%;}">
-			<thead>
-				<th>Company</th>
-				<th>Quantity</th>
-				<th>Price Paid</th>
-			</thead>
-			<tbody>
-				{% for key, value in data.items  %}
-					<tr>
-						<td>{{value.json.name}}</td>
-						<td>Not Found</td>
-						<td>{{value.json.price}}</td>
-						<td><a target="_blank" href='{% url "view_stock" value.json.symbol %}'>view stock</a></td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
-{% endblock %}
+	{% block main_content %}
 
-{% block extra_js %}
-{% endblock %}
+
+	{% endblock main_content %}
+
+	{% block extra_js %}
+
+	{% endblock extra_js %}
+	 </div><!--wrapper-end-->
+
+	</body>
+</html>
 
