@@ -24,7 +24,7 @@
 							<td>{{value.json.name}}</td>
 							<td>Not Found</td>
 							<td>{{value.json.price}}</td>
-							<td><a target="_blank" href='{% url "view_stock" value.json.symbol %}'>view stock</a></td>
+							<td><a href='{% url "view_stock" value.json.symbol %}'>view stock</a></td>
 						</tr>
 					{% endfor %}
 				</tbody>
